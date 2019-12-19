@@ -8,58 +8,37 @@ import shutil
 from datetime import datetime
 from time import gmtime, strftime
 
-
 class MyHandler(FileSystemEventHandler):
     def on_modified(self, event):
         for filename in os.listdir(folder_to_track):
             print(filename)
             i = 1
             if filename != 'Alecv':
-                # try:
-                    new_name = filename
+                new_name = filename
+                extension = 'noname'
+                try:
+                    extension = str(os.path.splitext(folder_to_track + '\\' + filename)[1])
+                    path = extensions_folders[extension]
+                except Exception:
                     extension = 'noname'
-                    try:
-                        extension = str(os.path.splitext(folder_to_track + '\\' + filename)[1])
-                        path = extensions_folders[extension]
-                    except Exception:
-                        extension = 'noname'
 
-                    now = datetime.now()
-                    year = now.strftime("%Y")
-                    month = now.strftime("%m")
+                now = datetime.now()
+                year = now.strftime("%Y")
+                month = now.strftime("%m")
 
-                    folder_destination_path = extensions_folders[extension]
-                    
-                    year_exists = False
-                    month_exists = False
-                    for folder_name in os.listdir(extensions_folders[extension]):
-                        if folder_name == year:
-                            folder_destination_path = extensions_folders[extension] + "\\" +year
-                            year_exists = True
-                            for folder_month in os.listdir(folder_destination_path):
-                                if month == folder_month:
-                                    folder_destination_path = extensions_folders[extension] + "\\" + year + "\\" + month
-                                    month_exists = True
-                    if not year_exists:
-                        os.mkdir(extensions_folders[extension] + "\\" + year)
-                        folder_destination_path = extensions_folders[extension] + "\\" + year
-                    if not month_exists:
-                        os.mkdir(folder_destination_path + "\\" + month)
-                        folder_destination_path = folder_destination_path + "\\" + month
-
-
+                folder_destination_path = extensions_folders[extension]
+                
+                file_exists = os.path.isfile(folder_destination_path + "\\" + new_name)
+                while file_exists:
+                    i += 1
+                    new_name = os.path.splitext(folder_to_track + '\\' + filename)[0] + str(i) + os.path.splitext(folder_to_track + '\\' + filename)[1]
+                    new_name = new_name.split("\\")[4]
                     file_exists = os.path.isfile(folder_destination_path + "\\" + new_name)
-                    while file_exists:
-                        i += 1
-                        new_name = os.path.splitext(folder_to_track + '\\' + filename)[0] + str(i) + os.path.splitext(folder_to_track + '\\' + filename)[1]
-                        new_name = new_name.split("\\")[4]
-                        file_exists = os.path.isfile(folder_destination_path + "\\" + new_name)
-                    src = folder_to_track + "\\" + filename
+                src = folder_to_track + "\\" + filename
 
-                    new_name = folder_destination_path + "\\" + new_name
-                    os.rename(src, new_name)
-                # except Exception:
-                #     print(filename)
+                new_name = folder_destination_path + "\\" + new_name
+                os.rename(src, new_name)
+
 
 extensions_folders = {
 #No name
