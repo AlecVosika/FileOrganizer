@@ -22,10 +22,6 @@ class MyHandler(FileSystemEventHandler):
                 except Exception:
                     extension = 'noname'
 
-                now = datetime.now()
-                year = now.strftime("%Y")
-                month = now.strftime("%m")
-
                 folder_destination_path = extensions_folders[extension]
                 
                 file_exists = os.path.isfile(folder_destination_path + "\\" + new_name)
