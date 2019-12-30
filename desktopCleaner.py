@@ -8,7 +8,6 @@ import shutil
 from datetime import datetime
 from time import gmtime, strftime
 
-# test
 
 class MyHandler(FileSystemEventHandler):
     def on_modified(self, event):
